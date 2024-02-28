@@ -199,6 +199,36 @@ impl SyscallGenericLibfunc for StorageWriteLibfunc {
     }
 }
 
+/// Libfunc for a bash command
+#[derive(Default)]
+pub struct BashCommandLibfunc {}
+impl SyscallGenericLibfunc for BashCommandLibfunc {
+    const STR_ID: &'static str = "bash_command_syscall";
+
+    fn input_tys(
+        context: &dyn SignatureSpecializationContext,
+    ) -> Result<Vec<crate::ids::ConcreteTypeId>, SpecializationError> {
+        //let span_ty = super::felt252_span_ty(context)?;
+        let bytes_array_ty = super::byte_array_ty(context)?;
+        Ok(vec![
+            // Command
+            bytes_array_ty.clone(),
+        ])
+    }
+
+    fn success_output_tys(
+        context: &dyn SignatureSpecializationContext,
+    ) -> Result<Vec<crate::ids::ConcreteTypeId>, SpecializationError> {
+        Ok(vec![
+           context.get_concrete_type(Felt252Type::id(), &[])?
+        ])
+        //let span_ty = super::felt252_span_ty(context)?;
+        //Ok(vec![
+        //    // Output
+        //    span_ty,])
+    }
+}
+
 /// Libfunc for a get block hash system call.
 #[derive(Default)]
 pub struct GetBlockHashLibfunc {}

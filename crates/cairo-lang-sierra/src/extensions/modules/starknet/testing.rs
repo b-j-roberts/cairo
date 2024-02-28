@@ -80,5 +80,6 @@ impl SignatureBasedConcreteLibfunc for CheatcodeConcreteLibfunc {
 define_libfunc_hierarchy! {
     pub enum TestingLibfunc {
          Cheatcode(CheatcodeLibfunc),
+         // TODO: Bash command here?
     }, TestingConcreteLibfunc
 }

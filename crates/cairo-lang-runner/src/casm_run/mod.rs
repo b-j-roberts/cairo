@@ -361,6 +361,7 @@ mod gas_costs {
     pub const SEND_MESSAGE_TO_L1: usize = 50 * STEP;
     pub const STORAGE_READ: usize = 50 * STEP;
     pub const STORAGE_WRITE: usize = 50 * STEP;
+    pub const BASH_COMMAND: usize = 1000 * STEP;
 }
 
 /// Deducts gas from the given gas counter, or fails the syscall if there is not enough gas.
@@ -666,6 +667,9 @@ impl<'a> CairoHintProcessor<'a> {
                     system_buffer.next_felt252()?.into_owned(),
                 )
             }),
+            "BashCommand" => execute_handle_helper(&mut |system_buffer, gas_counter| {
+                self.bash_command(gas_counter, system_buffer.next_arr()?, system_buffer.next_felt252()?.into_owned(), system_buffer.next_usize()?)
+            }),
             "GetBlockHash" => execute_handle_helper(&mut |system_buffer, gas_counter| {
                 self.get_block_hash(gas_counter, system_buffer.next_u64()?)
             }),
@@ -899,6 +903,18 @@ impl<'a> CairoHintProcessor<'a> {
         res_segment.write(exec_info.contract_address.clone())?;
         res_segment.write(exec_info.entry_point_selector.clone())?;
         Ok(SyscallResult::Success(vec![exec_info_ptr.into()]))
+    }
+
+    fn bash_command(
+        &mut self,
+        gas_counter: &mut usize,
+        _data: Vec<Felt252>,
+        _pending_word: Felt252,
+        _pending_word_size: usize,
+    ) -> Result<SyscallResult, HintError> {
+        deduct_gas!(gas_counter, BASH_COMMAND);
+        let value: Felt252 = Felt252::new(42);
+        Ok(SyscallResult::Success(vec![value.into()]))
     }
 
     /// Executes the `emit_event_syscall` syscall.

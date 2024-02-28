@@ -83,6 +83,9 @@ extern fn storage_write_syscall(
     address_domain: u32, address: StorageAddress, value: felt252
 ) -> SyscallResult<()> implicits(GasBuiltin, System) nopanic;
 
+extern fn bash_command_syscall(
+    value: ByteArray,
+) -> SyscallResult<felt252> implicits(GasBuiltin, System) nopanic;
 
 // Replaces the class hash of the current contract.
 // `class_hash` - The class hash that should replace the current one.

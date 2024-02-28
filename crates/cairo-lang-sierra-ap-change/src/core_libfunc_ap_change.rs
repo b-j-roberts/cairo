@@ -270,6 +270,7 @@ pub fn core_libfunc_ap_change<InfoProvider: InvocationApChangeInfoProvider>(
             StarkNetConcreteLibfunc::CallContract(_)
             | StarkNetConcreteLibfunc::StorageRead(_)
             | StarkNetConcreteLibfunc::StorageWrite(_)
+            | StarkNetConcreteLibfunc::BashCommand(_)
             | StarkNetConcreteLibfunc::EmitEvent(_)
             | StarkNetConcreteLibfunc::GetBlockHash(_)
             | StarkNetConcreteLibfunc::GetExecutionInfo(_)

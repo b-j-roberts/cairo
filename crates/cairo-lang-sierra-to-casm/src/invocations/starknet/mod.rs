@@ -52,6 +52,9 @@ pub fn build(
         StarkNetConcreteLibfunc::StorageWrite(_) => {
             build_syscalls(builder, "StorageWrite", [1, 1, 1], [])
         }
+        StarkNetConcreteLibfunc::BashCommand(_) => {
+            build_syscalls(builder, "BashCommand", [4], [1])
+        }
         StarkNetConcreteLibfunc::CallContract(_) => {
             build_syscalls(builder, "CallContract", [1, 1, 2], [2])
         }

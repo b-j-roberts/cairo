@@ -352,6 +352,7 @@ impl PythonicHint for CoreHintBase {
 }
 
 impl PythonicHint for CoreHint {
+    // TODO: Look here
     fn get_pythonic_hint(&self) -> String {
         match self {
             CoreHint::AllocSegment { dst } => format!("memory{dst} = segments.add()"),

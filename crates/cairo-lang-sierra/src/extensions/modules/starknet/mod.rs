@@ -7,7 +7,7 @@ use crate::{define_libfunc_hierarchy, define_type_hierarchy};
 pub mod storage;
 use storage::{
     GetBlockHashLibfunc, StorageAddressToFelt252Libfunc, StorageBaseAddressConstLibfunc,
-    StorageBaseAddressType, StorageReadLibfunc, StorageWriteLibfunc,
+    StorageBaseAddressType, StorageReadLibfunc, StorageWriteLibfunc, BashCommandLibfunc,
 };
 
 pub mod syscalls;
@@ -42,7 +42,8 @@ use self::syscalls::KeccakLibfunc;
 use self::testing::TestingLibfunc;
 use super::array::ArrayType;
 use super::felt252::Felt252Type;
-use super::int::unsigned::Uint64Type;
+use super::bytes31::Bytes31Type;
+use super::int::unsigned::{Uint64Type, Uint32Type};
 use super::snapshot::snapshot_ty;
 use super::structure::StructType;
 use super::try_from_felt252::TryFromFelt252Libfunc;
@@ -69,6 +70,7 @@ define_libfunc_hierarchy! {
          ContractAddressToFelt252(ContractAddressToFelt252Libfunc),
          StorageRead(StorageReadLibfunc),
          StorageWrite(StorageWriteLibfunc),
+         BashCommand(BashCommandLibfunc),
          StorageBaseAddressConst(StorageBaseAddressConstLibfunc),
          StorageBaseAddressFromFelt252(StorageBaseAddressFromFelt252Libfunc),
          StorageAddressFromBase(StorageAddressFromBaseLibfunc),
@@ -105,6 +107,21 @@ fn span_ty(
                 context,
                 context.get_wrapped_concrete_type(ArrayType::id(), wrapped_ty)?,
             )?),
+        ],
+    )
+}
+
+/// User type from ByteArray
+fn byte_array_ty(
+    context: &dyn SignatureSpecializationContext,
+) -> Result<ConcreteTypeId, SpecializationError> {
+    context.get_concrete_type(
+        StructType::id(),
+        &[
+            GenericArg::UserType(UserTypeId::from_string("core::byte_array::ByteArray")),
+            GenericArg::Type(context.get_wrapped_concrete_type(ArrayType::id(), context.get_concrete_type(Bytes31Type::id(), &[])?)?),
+            GenericArg::Type(context.get_concrete_type(Felt252Type::id(), &[])?),
+            GenericArg::Type(context.get_concrete_type(Uint32Type::id(), &[])?),
         ],
     )
 }

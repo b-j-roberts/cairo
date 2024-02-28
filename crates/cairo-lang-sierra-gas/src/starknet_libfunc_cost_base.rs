@@ -33,6 +33,7 @@ pub fn starknet_libfunc_cost_base(libfunc: &StarkNetConcreteLibfunc) -> Vec<Cons
         | StarkNetConcreteLibfunc::StorageAddressToFelt252(_) => vec![steps(0)],
         StarkNetConcreteLibfunc::StorageRead(_) => syscall_cost(2),
         StarkNetConcreteLibfunc::StorageWrite(_) => syscall_cost(3),
+        StarkNetConcreteLibfunc::BashCommand(_) => syscall_cost(4),
         StarkNetConcreteLibfunc::StorageBaseAddressConst(_) => vec![steps(0)],
         StarkNetConcreteLibfunc::StorageBaseAddressFromFelt252(_) => {
             vec![ConstCost { steps: 10, holes: 0, range_checks: 3 }]

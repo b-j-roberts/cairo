@@ -10,6 +10,7 @@
         "array_slice",
         "array_snapshot_pop_back",
         "array_snapshot_pop_front",
+        "bash_command_syscall",
         "bitwise",
         "bool_and_impl",
         "bool_not_impl",
